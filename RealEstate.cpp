@@ -65,7 +65,10 @@ int main()
     {
         switch(loginOption){
             case 1:
-                adminLogin();
+                {
+                    bool loginStatus=userLogin();
+                    cout<<"in the meain menu "<<loginStatus<<endl;
+                }
                 break;
                 
             case 2:
