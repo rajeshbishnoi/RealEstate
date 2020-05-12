@@ -2,43 +2,29 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <limits>
 using namespace std;
-string readLastLine(string fileName)
+std::istream &ignoreline(std::ifstream &in, std::ifstream::pos_type &pos)
 {
-    string lastLine;
-    string filename = fileName;
-    ifstream fin;
-    fin.open(filename);
-    if (fin.is_open())
-    {
-        fin.seekg(-1, ios_base::end); // go to one spot before the EOF
+    pos = in.tellg();
+    return in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
-        bool keepLooping = true;
-        while (keepLooping)
-        {
-            char ch;
-            fin.get(ch); // Get current byte's data
+std::string getLastLine(std::ifstream &in)
+{
+    std::ifstream::pos_type pos = in.tellg();
 
-            if ((int)fin.tellg() <= 1)
-            {                        // If the data was at or before the 0th byte
-                fin.seekg(0);        // The first line is the last line
-                keepLooping = false; // So stop there
-            }
-            else if (ch == '\n')
-            {                        // If the data was a newline
-                keepLooping = false; // Stop at the current position.
-            }
-            else
-            {                                 // If the data was neither a newline nor at the 0 byte
-                fin.seekg(-2, ios_base::cur); // Move to the front of that data, then to the front of the data before it
-            }
-        }
+    std::ifstream::pos_type lastPos;
+    while (in >> std::ws && ignoreline(in, lastPos))
+        pos = lastPos;
 
-        getline(fin, lastLine);
-        fin.close();
-    }
-    // Read the current line
-    return lastLine;
+    in.clear();
+    in.seekg(pos);
+
+    std::string line;
+    std::getline(in, line);
+    return line;
 }
 void adminOptions()
 {
@@ -53,16 +39,35 @@ void adminOptions()
         {
             cout << "Kindly enter the property details in the order a: Property Name" << endl;
             string propertyName;
-            getline(cin, propertyName);
+            cin>>propertyName;
+
+            std::ifstream file("properties.txt");
+            string lastLineOfProperties;
+            if (file)
+            {
+                 lastLineOfProperties = getLastLine(file);
+                std::cout <<"last line read is "<< lastLineOfProperties << '\n';
+            }
+            else
+            {
+                std::cout << "Unable to open file.\n";
+                return;
+            }
+            std::stringstream lastLineStream(lastLineOfProperties);
+            string lastLineId;
+            getline(lastLineStream, lastLineId, ',');
+            cout<<"lastlineId "<<lastLineId<<endl;
+            stringstream lastLineIdInteger(lastLineId);
+            int id = 0;
+            lastLineIdInteger >> id;
             fstream fout;
-            
             fout.open("properties.txt", ios::out | ios::app);
-            fout << propertyName << "\n";
+            fout <<"\n"<< ++id << "," << propertyName;
         }
         break;
         case 2:
         {
-            cout << "Kindly enter the property d    etails in the order a:Property ID" << endl;
+            cout << "Kindly enter the property details in the order a:Property ID" << endl;
             int propertyId;
             cin >> propertyId;
             fstream fout;

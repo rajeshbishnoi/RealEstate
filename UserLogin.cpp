@@ -27,7 +27,7 @@ while(strcmp(login_username,stored_username)){
     pull>>stored_username;
     if(pull.eof()){   //if it is the end of file
         cout<<"Username does not exist. "<<endl;
-        return false;  
+        return false;
     }
 }
 pull>>stored_password; 
@@ -35,7 +35,7 @@ pull>>stored_password;
 //since username and password are in the same line, password next to
 //correctly inputted username is saved in stored_password
 
-cout<<"Password: ";   
+cout<<"Password: ";
 //now user enters password to confirm username
 cin>>login_password;
 while(strcmp(stored_password,login_password)){
