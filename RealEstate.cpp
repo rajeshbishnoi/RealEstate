@@ -3,9 +3,6 @@
 #include "Menu.h"
 using namespace std;
 
-void adminLogin()
-{
-}
 int main()
 {
     loginScreenMenu();
@@ -20,7 +17,7 @@ int main()
             bool loginStatus = userLogin();
             if (loginStatus == true)
             {
-                adminMenu();
+                adminOptions();
             }
         }
         break;
