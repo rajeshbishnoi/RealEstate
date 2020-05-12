@@ -39,14 +39,14 @@ void adminOptions()
         {
             cout << "Kindly enter the property details in the order a: Property Name" << endl;
             string propertyName;
-            cin>>propertyName;
+            cin >> propertyName;
 
             std::ifstream file("properties.txt");
             string lastLineOfProperties;
             if (file)
             {
-                 lastLineOfProperties = getLastLine(file);
-                std::cout <<"last line read is "<< lastLineOfProperties << '\n';
+                lastLineOfProperties = getLastLine(file);
+                std::cout << "last line read is " << lastLineOfProperties << '\n';
             }
             else
             {
@@ -56,13 +56,14 @@ void adminOptions()
             std::stringstream lastLineStream(lastLineOfProperties);
             string lastLineId;
             getline(lastLineStream, lastLineId, ',');
-            cout<<"lastlineId "<<lastLineId<<endl;
+            cout << "lastlineId " << lastLineId << endl;
             stringstream lastLineIdInteger(lastLineId);
             int id = 0;
             lastLineIdInteger >> id;
             fstream fout;
             fout.open("properties.txt", ios::out | ios::app);
-            fout <<"\n"<< ++id << "," << propertyName;
+            fout << "\n"
+                 << ++id << "," << propertyName;
         }
         break;
         case 2:
@@ -86,14 +87,7 @@ void adminOptions()
         default:
             break;
         }
-        cout << "Kindly select one of the options:....";
-        cout << "1: Add a Property" << endl;
-        cout << "2: Add Owner Details" << endl;
-        cout << "3: Add Brochure" << endl;
-        cout << "4: Add Photos" << endl;
-        cout << "5: View Visited users" << endl;
-        cout << "6: View Interested users" << endl;
-        cout << "0: To Quit" << endl;
+        adminMenu();
         cin >> option;
     }
 }
